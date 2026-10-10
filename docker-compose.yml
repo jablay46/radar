@@ -1,0 +1,10 @@
+services:
+  wallet-radar:
+    build: .
+    container_name: solana-wallet-radar
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#091112" />
+  <title>Solana Wallet Radar</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand"><span class="brand-mark">◒</span><span>WALLET RADAR</span><small>Solana research</small></div>
+    <div class="header-actions"><span id="modeBadge" class="badge neutral">Memuat konfigurasi</span><a href="#method" class="quiet-link">Metodologi</a></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">ON-CHAIN COHORT RESEARCH · BUKAN BOT BELI</div>
+      <h1>Temukan <em>konvergensi</em>,<br />bukan janji 100×.</h1>
+      <p class="lead">Ambil pembeli DEX awal dari token historis, saring wallet aktif dan bot-like, lalu pantau token baru yang dibeli bersama. Setiap keputusan menyimpan bukti dan hard gate.</p>
+      <div class="risk-callout"><span>!</span><p><strong>Riset, bukan nasihat investasi.</strong> Token meme sangat berisiko. Skor hanya mengurutkan kandidat untuk audit manual—tidak pernah mengirim transaksi atau memakai private key.</p></div>
+    </section>
+
+    <section class="control-panel" aria-label="Mulai analisis">
+      <div class="control-heading">
+        <div><span class="section-kicker">01 / SEED TOKEN</span><h2>Analisis cohort pembeli awal</h2></div>
+        <button id="exampleBtn" class="text-button" type="button">Gunakan mint contoh</button>
+      </div>
+      <form id="analysisForm">
+        <label class="field mint-field"><span>Mint address Solana</span><input id="mintInput" name="mint" autocomplete="off" spellcheck="false" placeholder="Contoh: 7xKX… mint token historis" required minlength="32" maxlength="64" /></label>
+        <label class="field compact"><span>Sumber data</span><select id="modeSelect" name="mode"><option value="demo">Demo aman (data sintetis)</option><option value="live">Live API (Helius + Birdeye)</option></select></label>
+        <button id="runButton" class="primary-button" type="submit"><span>Jalankan analisis</span><b>→</b></button>
+      </form>
+      <div id="configHint" class="config-hint">Memeriksa status penyedia data…</div>
+      <div id="formError" class="form-error" role="alert"></div>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <div class="empty-orbit"><i></i><i></i><i></i><span>◒</span></div>
+      <div><span class="section-kicker">SIAP UNTUK DITELITI</span><h2>Mulai dengan satu token lama yang dapat Anda audit.</h2><p>Mode demo memperlihatkan seluruh alur tanpa API key. Mode live membutuhkan <code>HELIUS_API_KEY</code> dan <code>BIRDEYE_API_KEY</code> di file <code>.env</code>.</p></div>
+    </section>
+
+    <section id="results" class="hidden" aria-live="polite">
+      <div id="demoBanner" class="demo-banner hidden"><strong>MODE DEMO</strong> Semua wallet, trade, token kandidat, dan harga di bawah ini sintetis. Tidak ada data blockchain live yang dipakai.</div>
+      <div class="result-title-row"><div><span class="section-kicker">02 / HASIL ANALISIS</span><h2 id="seedTitle">Seed token</h2><p id="seedMeta" class="muted"></p></div><button id="paperRefresh" class="secondary-button" type="button">Perbarui paper tracking</button></div>
+      <div id="metrics" class="metrics"></div>
+
+      <div class="grid two-col upper-grid">
+        <section class="panel"><div class="panel-head"><div><span class="section-kicker">JEJAK AWAL</span><h3>20 pembeli DEX unik pertama</h3></div><span id="buyersSource" class="source-chip"></span></div><div class="table-scroll"><table><thead><tr><th>#</th><th>Wallet</th><th>Buy pertama</th><th>Aktif 30h</th><th>Bot likelihood</th></tr></thead><tbody id="buyersTable"></tbody></table></div></section>
+        <section class="panel"><div class="panel-head"><div><span class="section-kicker">FILTER</span><h3>Cohort yang dapat dipantau</h3></div><span id="cohortCount" class="source-chip"></span></div><div id="cohortList" class="cohort-list"></div></section>
+      </div>
+
+      <section class="signal-section"><div class="section-title"><div><span class="section-kicker">03 / KONVERGENSI</span><h2>Kandidat untuk review manual</h2></div><p>Hanya kandidat yang lolos hard gate dibuat sebagai paper signal. Cluster pendanaan bersama dihitung satu kali bila tersedia.</p></div><div id="signals" class="signal-grid"></div></section>
+
+      <section class="panel paper-panel"><div class="panel-head"><div><span class="section-kicker">04 / PAPER TRACKING</span><h3>Posisi hipotetis terbuka</h3></div><span class="source-chip">tanpa eksekusi</span></div><div class="table-scroll"><table><thead><tr><th>Token</th><th>Skor</th><th>Entry</th><th>Harga terakhir</th><th>Return</th><th>Alert</th></tr></thead><tbody id="paperTable"></tbody></table></div></section>
+
+      <section class="notes-panel"><span class="section-kicker">CATATAN METODE</span><ul id="methodNotes"></ul></section>
+    </section>
+
+    <section id="method" class="method-section">
+      <div><span class="section-kicker">METODOLOGI YANG DAPAT DIAUDIT</span><h2>Tujuh langkah, dengan guardrail.</h2></div>
+      <ol class="method-list">
+        <li><b>01</b><span><strong>Seed yang disengaja</strong> — Masukkan token historis; jangan memilih hanya contoh pemenang tanpa sampel pembanding.</span></li>
+        <li><b>02</b><span><strong>Swap, bukan transfer</strong> — Urutkan trade DEX buy dan ambil wallet unik pertama. Deployer, LP, transfer, dan unknown tidak masuk.</span></li>
+        <li><b>03</b><span><strong>Aktif dalam jendela waktu</strong> — Wallet harus masih berinteraksi melalui swap dalam 30 hari.</span></li>
+        <li><b>04</b><span><strong>Bot likelihood</strong> — Cadence, burst, dan kepadatan trade menghasilkan heuristik; bukan label identitas mutlak.</span></li>
+        <li><b>05</b><span><strong>Konvergensi</strong> — Hanya pembelian token yang sama oleh beberapa wallet/cluster yang mendapat perhatian.</span></li>
+        <li><b>06</b><span><strong>Hard gate</strong> — Konsensus, likuiditas, dan ketersediaan data pasar wajib lolos sebelum paper tracking.</span></li>
+        <li><b>07</b><span><strong>Audit sebelum tindakan</strong> — Periksa holder, authority, slippage, creator exposure, dan transaksi sumber secara manual.</span></li>
+      </ol>
+    </section>
+  </main>
+  <footer><span>Solana Wallet Radar · local-first research workspace</span><span>Private key tidak diperlukan dan tidak didukung.</span></footer>
+  <script src="/app.js"></script>
+</body>
+</html>
